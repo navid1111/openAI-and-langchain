@@ -3,6 +3,11 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.prompts import SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from getpass import getpass
+import argparse
+parser=argparse.ArgumentParser()
+parser.add_argument("--task",default="print hello world")
+parser.add_argument("--language",default="c++")
+args=parser.parse_args()
 
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY") or getpass(
     "Enter OpenAI API Key: "
@@ -25,6 +30,6 @@ prompt=ChatPromptTemplate.from_messages(
  user_prompt]
 )
 chain= prompt | llm
-result=chain.invoke({"language":"python","task":"print 5 numbers"}).content
+result=chain.invoke({"language":args.language,"task":args.task}).content
 
 print(result)
