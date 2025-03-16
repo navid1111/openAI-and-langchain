@@ -3,9 +3,10 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.prompts import SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from getpass import getpass
+from langchain_core.output_parsers import JsonOutputParser
 import argparse
 parser=argparse.ArgumentParser()
-parser.add_argument("--task",default="print hello world")
+parser.add_argument("--task",default="Sum two numbers 55 and 99")
 parser.add_argument("--language",default="c++")
 args=parser.parse_args()
 
@@ -25,11 +26,23 @@ user_prompt=HumanMessagePromptTemplate.from_template(
     input_variables=["language","task"]
 
 )
+
+user_prompt_test=HumanMessagePromptTemplate.from_template(
+        """ Write a test for the following language {language} code:\n{code}""",
+    input_variables=["language","code"]
+
+)
 prompt=ChatPromptTemplate.from_messages(
 [ system_prompt,
  user_prompt]
 )
+prompt_test=ChatPromptTemplate.from_messages(
+[ system_prompt,
+ user_prompt_test]
+)
 chain= prompt | llm
+test_chain= prompt_test |llm
 result=chain.invoke({"language":args.language,"task":args.task}).content
+test=test_chain.invoke({"language":args.language,"code":result})
 
-print(result)
+print(test.content)
