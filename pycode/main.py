@@ -1,4 +1,5 @@
 import os
+from langchain.document_loaders import TextLoader
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.prompts import SystemMessagePromptTemplate, HumanMessagePromptTemplate, MessagesPlaceholder
@@ -21,6 +22,7 @@ args = parser.parse_args()
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY") or getpass(
     "Enter OpenAI API Key: "
 )
+
 
 # Initialize the OpenAI model
 openai_model = "gpt-4o-mini"
