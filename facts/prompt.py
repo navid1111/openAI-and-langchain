@@ -4,6 +4,7 @@ from langchain.vectorstores import Chroma # Updated import
 from langchain_openai import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
 from langchain_openai import ChatOpenAI
+from redundant_filter_retrieval import RedundantFilterRetrievar
 
 load_dotenv()
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
@@ -15,7 +16,10 @@ db = Chroma(
     persist_directory='emb',
     embedding_function=embeddings
 )
-retriever = db.as_retriever()
+retriever = RedundantFilterRetrievar(
+    embedding=embeddings,
+    chroma=db
+)
 
 chain = RetrievalQA.from_chain_type(
     llm=llm,
